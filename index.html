@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campanha dos Alimentos — Igreja Cristã Unidos pelo Reino</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background-color: #111; color: #eee; }
+    .navbar { background: #000; border-bottom: 1px solid #2b2b2b; }
+    .gold { color: #d4af37; }
+    .silver { color: #c0c0c0; }
+    .card { border: 1px solid #d4af37; }
+    section { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-dark p-3 sticky-top">
+    <div class="container">
+      <span class="navbar-brand gold fw-bold">Campanha dos Alimentos</span>
+      <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-outline-warning btn-sm" href="#inicio">Início</a>
+        <a class="btn btn-outline-warning btn-sm" href="#doar">Doar</a>
+        <a class="btn btn-warning btn-sm fw-bold" href="#admin">Área ADM</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-3 pb-5">
+    <!-- 1. INÍCIO -->
+    <section id="inicio">
+      <h1 class="gold fw-bold">Campanha dos Alimentos</h1>
+      <p class="silver mb-2">Igreja Cristã Unidos pelo Reino</p>
+      <p class="silver">
+        Acompanhe o que já foi doado neste mês para ajudar a diversificar as cestas e evitar que faltem itens essenciais.
+      </p>
+    </section>
+
+    <!-- 2. DOAÇÕES DO MÊS + INTENÇÃO DE DOAR -->
+    <section id="doar">
+      <h2 class="gold">Doações e Intenção de Doar</h2>
+      <p class="silver">Veja abaixo o que já foi doado neste mês e sinalize sua intenção de contribuir.</p>
+
+      <div class="card bg-dark p-4 mt-3 mb-4">
+        <h4 class="gold">Doações do mês</h4>
+        <ul id="listaEstoqueMes" class="list-group bg-dark mt-3">
+          <li class="list-group-item bg-dark text-light border-secondary">Arroz (kg) — 12</li>
+          <li class="list-group-item bg-dark text-light border-secondary">Feijão (kg) — 8</li>
+          <li class="list-group-item bg-dark text-light border-secondary">Óleo de Soja (un) — 6</li>
+          <li class="list-group-item bg-dark text-light border-secondary">Leite (L) — 10</li>
+          <li class="list-group-item bg-dark text-light border-secondary">Macarrão (pct) — 15</li>
+          <li class="list-group-item bg-dark text-light border-secondary">Café (pct) — 4</li>
+          <li class="list-group-item bg-dark text-light border-secondary">Açúcar (kg) — 5</li>
+          <li class="list-group-item bg-dark text-light border-secondary">Sal (pct) — 3</li>
+          <li class="list-group-item bg-dark text-light border-secondary">Outros — 2</li>
+        </ul>
+      </div>
+
+      <div class="card bg-dark p-4 mt-3 mb-4">
+        <h4 class="gold">Sinalizar intenção de doação</h4>
+        <p class="silver small">
+          Sem cadastro complexo: informe seu nome completo, escolha o item e envie sua intenção para a liderança analisar no painel.
+        </p>
+
+        <input id="nomeIrmao" class="form-control mb-3" placeholder="Seu nome completo">
+
+        <select id="selectAlimento" class="form-select mb-3" onchange="verificarOutro()">
+          <option value="" selected disabled>Selecione o alimento...</option>
+          <option value="Arroz (kg)">Arroz (kg)</option>
+          <option value="Feijão (kg)">Feijão (kg)</option>
+          <option value="Óleo de Soja (un)">Óleo de Soja (un)</option>
+          <option value="Leite (L)">Leite (L)</option>
+          <option value="Macarrão (pct)">Macarrão (pct)</option>
+          <option value="Café (pct)">Café (pct)</option>
+          <option value="Açúcar (kg)">Açúcar (kg)</option>
+          <option value="Sal (pct)">Sal (pct)</option>
+          <option value="Outros">Outros</option>
+        </select>
+
+        <input id="outroAlimento" class="form-control mb-3 d-none" placeholder="Qual outro item você pretende doar?">
+        <input id="qtdAlimento" type="number" min="1" class="form-control mb-3" placeholder="Quantidade (kg, L, un ou pct)">
+
+        <button type="button" class="btn btn-warning w-100 fw-bold" onclick="enviarIntencao()">
+          Enviar intenção de doação
+        </button>
+
+        <div id="avisoIntencao" class="mt-3"></div>
+      </div>
+    </section>
+
+    <!-- 3. LOGIN E PAINEL ADMINISTRATIVO (LIDERANÇA) -->
+    <section id="admin">
+      <h2 class="gold">Área Administrativa</h2>
+      <p class="silver">Acesso exclusivo para conferência de intenções de doação pela liderança.</p>
+
+      <div id="boxLogin" class="card bg-dark p-4 mt-3">
+        <h4 class="gold">Entrar no Painel</h4>
+        <input id="loginUsuario" class="form-control mb-3" placeholder="Usuário">
+        <input id="loginSenha" type="password" class="form-control mb-3" placeholder="Senha">
+        <button type="button" class="btn btn-warning w-100 fw-bold" onclick="fazerLogin()">
+          Acessar
+        </button>
+        <div id="avisoLogin" class="mt-3"></div>
+      </div>
+
+      <div id="painelAdm" class="card bg-dark p-4 mt-3 d-none">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="gold mb-0">Solicitações de Intenção de Doação</h4>
+          <button type="button" class="btn btn-outline-light btn-sm" onclick="sairPainel()">Sair</button>
+        </div>
+        <div id="listaSolicitacoesAdm">
+          <p class="silver">Carregando solicitações...</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbyU9cb6Rtk85zpf_-sDn0a_lqbxUeL7YPjhee136_F_yPY0fRfg0ghCCUmk-tBM-vv4/exec";
+
+    let credencialUsuario = "";
+    let credencialSenha = "";
+
+    function verificarOutro() {
+      const select = document.getElementById("selectAlimento");
+      const outroInput = document.getElementById("outroAlimento");
+      if (select.value === "Outros") {
+        outroInput.classList.remove("d-none");
+        outroInput.focus();
+      } else {
+        outroInput.classList.add("d-none");
+        outroInput.value = "";
+      }
+    }
+
+    function renderizarEstoque(lista) {
+      if (!Array.isArray(lista) || lista.length === 0) return;
+      const ul = document.getElementById("listaEstoqueMes");
+      ul.innerHTML = "";
+      lista.forEach(item => {
+        const li = document.createElement("li");
+        li.className = "list-group-item bg-dark text-light border-secondary";
+        li.textContent = `${item.alimento} — ${item.quantidade}`;
+        ul.appendChild(li);
+      });
+    }
+
+    async function carregarEstoqueInicial() {
+      if (!URL_APPS_SCRIPT || URL_APPS_SCRIPT.includes("COLE_A_URL")) return;
+      try {
+        const resp = await fetch(URL_APPS_SCRIPT);
+        const dados = await resp.json();
+        if (dados.ok && dados.estoque) {
+          renderizarEstoque(dados.estoque);
+        }
+      } catch (e) {
+        console.error("Falha ao buscar estoque:", e);
+      }
+    }
+
+    async function enviarIntencao() {
+      const nomeInput = document.getElementById("nomeIrmao");
+      const select = document.getElementById("selectAlimento");
+      const outroInput = document.getElementById("outroAlimento");
+      const qtdInput = document.getElementById("qtdAlimento");
+      const aviso = document.getElementById("avisoIntencao");
+
+      const nome = nomeInput.value.trim();
+      let alimento = select.value;
+      if (alimento === "Outros" && outroInput.value.trim() !== "") {
+        alimento = `Outros (${outroInput.value.trim()})`;
+      }
+      const quantidade = parseInt(qtdInput.value, 10);
+
+      if (!nome || !select.value || (select.value === "Outros" && !outroInput.value.trim()) || isNaN(quantidade) || quantidade <= 0) {
+        aviso.innerHTML = '<div class="alert alert-danger py-2">Preencha seu nome completo, o alimento e uma quantidade válida.</div>';
+        return;
+      }
+
+      if (!URL_APPS_SCRIPT || URL_APPS_SCRIPT.includes("COLE_A_URL")) {
+        aviso.innerHTML = '<div class="alert alert-warning py-2">Configure a URL_APPS_SCRIPT no código para salvar na planilha.</div>';
+        return;
+      }
+
+      aviso.innerHTML = '<div class="alert alert-info py-2">Enviando solicitação...</div>';
+
+      try {
+        const resp = await fetch(URL_APPS_SCRIPT, {
+          method: "POST",
+          body: JSON.stringify({
+            acao: "registrarIntencao",
+            nome,
+            contato: "",
+            alimento,
+            quantidade
+          })
+        });
+        const resultado = await resp.json();
+
+        if (resultado.ok) {
+          aviso.innerHTML = `<div class="alert alert-success py-2">${resultado.mensagem}</div>`;
+          nomeInput.value = "";
+          select.value = "";
+          outroInput.classList.add("d-none");
+          outroInput.value = "";
+          qtdInput.value = "";
+        } else {
+          aviso.innerHTML = `<div class="alert alert-danger py-2">${resultado.mensagem || "Erro ao enviar."}</div>`;
+        }
+      } catch (e) {
+        aviso.innerHTML = '<div class="alert alert-danger py-2">Erro de conexão ao enviar intenção.</div>';
+      }
+    }
+
+    async function fazerLogin() {
+      const usuario = document.getElementById("loginUsuario").value.trim();
+      const senha = document.getElementById("loginSenha").value.trim();
+      const avisoLogin = document.getElementById("avisoLogin");
+
+      if (!usuario || !senha) {
+        avisoLogin.innerHTML = '<div class="alert alert-danger py-2">Informe usuário e senha.</div>';
+        return;
+      }
+
+      if (!URL_APPS_SCRIPT || URL_APPS_SCRIPT.includes("COLE_A_URL")) {
+        avisoLogin.innerHTML = '<div class="alert alert-warning py-2">Configure a URL_APPS_SCRIPT no código para autenticar na planilha.</div>';
+        return;
+      }
+
+      avisoLogin.innerHTML = '<div class="alert alert-info py-2">Verificando credenciais...</div>';
+
+      try {
+        const resp = await fetch(URL_APPS_SCRIPT, {
+          method: "POST",
+          body: JSON.stringify({
+            acao: "login",
+            usuario,
+            senha
+          })
+        });
+        const resultado = await resp.json();
+
+        if (resultado.ok && resultado.autenticado) {
+          credencialUsuario = usuario;
+          credencialSenha = senha;
+          avisoLogin.innerHTML = "";
+          document.getElementById("boxLogin").classList.add("d-none");
+          document.getElementById("painelAdm").classList.remove("d-none");
+          renderizarSolicitacoes(resultado.intencoes || []);
+          if (resultado.estoque) renderizarEstoque(resultado.estoque);
+        } else {
+          avisoLogin.innerHTML = `<div class="alert alert-danger py-2">${resultado.mensagem || "Login recusado, tente novamente."}</div>`;
+        }
+      } catch (e) {
+        avisoLogin.innerHTML = '<div class="alert alert-danger py-2">Erro de conexão ao tentar autenticar.</div>';
+      }
+    }
+
+    function renderizarSolicitacoes(lista) {
+      const container = document.getElementById("listaSolicitacoesAdm");
+      if (!lista.length) {
+        container.innerHTML = '<p class="silver mb-0">Nenhuma solicitação pendente no momento.</p>';
+        return;
+      }
+
+      container.innerHTML = lista.map(item => `
+        <div class="border border-secondary rounded p-3 mb-3 bg-black">
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+            <div>
+              <strong class="gold">${item.alimento} — ${item.quantidade}</strong><br>
+              <span class="silver small">Nome: ${item.nome}</span><br>
+              <span class="text-secondary small">Data: ${item.data}</span>
+            </div>
+            <div class="d-flex gap-2">
+              <button type="button" class="btn btn-success btn-sm" onclick="atualizarSolicitacao('aprovarIntencao', ${item.linha})">
+                Confirmar
+              </button>
+              <button type="button" class="btn btn-outline-danger btn-sm" onclick="atualizarSolicitacao('descartarIntencao', ${item.linha})">
+                Descartar
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    async function atualizarSolicitacao(acao, linha) {
+      const container = document.getElementById("listaSolicitacoesAdm");
+      container.innerHTML = '<p class="silver mb-0">Atualizando...</p>';
+
+      try {
+        const resp = await fetch(URL_APPS_SCRIPT, {
+          method: "POST",
+          body: JSON.stringify({
+            acao,
+            usuario: credencialUsuario,
+            senha: credencialSenha,
+            linha
+          })
+        });
+        const resultado = await resp.json();
+
+        if (resultado.ok) {
+          renderizarSolicitacoes(resultado.intencoes || []);
+          if (resultado.estoque) renderizarEstoque(resultado.estoque);
+        } else {
+          container.innerHTML = `<div class="alert alert-danger py-2">${resultado.mensagem || "Falha ao atualizar."}</div>`;
+        }
+      } catch (e) {
+        container.innerHTML = '<div class="alert alert-danger py-2">Erro de conexão ao atualizar solicitação.</div>';
+      }
+    }
+
+    function sairPainel() {
+      credencialUsuario = "";
+      credencialSenha = "";
+      document.getElementById("loginUsuario").value = "";
+      document.getElementById("loginSenha").value = "";
+      document.getElementById("painelAdm").classList.add("d-none");
+      document.getElementById("boxLogin").classList.remove("d-none");
+    }
+
+    carregarEstoqueInicial();
+  </script>
+</body>
+</html>
